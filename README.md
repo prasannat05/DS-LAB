@@ -1,4 +1,5 @@
 https://chatgpt.com/share/697abfd9-e024-800d-a4da-dafae0b010e6 
+https://chatgpt.com/share/697abfd9-e024-800d-a4da-dafae0b010e6 untill exp 5
 1️⃣ revenue
 
 Type: Numerical (Continuous)
