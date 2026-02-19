@@ -1,0 +1,61 @@
+1. Interaction Features
+
+fico_income_ratio = fico_n / (revenue / 10000 + 1)
+
+What it is: Ratio of credit score (fico_n) to income. Scaled by 10,000 to avoid huge numbers.
+
+Why: Higher FICO + higher income → lower credit risk. This combines two important risk indicators into a single feature that might correlate better with loan_repaid.
+
+dti_fico_product = dti_n * fico_n / 1000
+
+What it is: Product of debt-to-income (dti_n) and credit score.
+
+Why: Individually, DTI and FICO influence repayment. Their interaction might reveal borrowers with high DTI but also high creditworthiness, or vice versa.
+
+loan_income_ratio = loan_amnt / (revenue + 1)
+
+What it is: Ratio of loan amount to income.
+
+Why: A large loan relative to income increases default risk. Linear and logistic models can capture this as a predictor for repayment.
+
+credit_capacity = (fico_n / 850) * (revenue / revenue.max())
+
+What it is: Normalized score combining FICO and relative income.
+
+Why: Provides a standardized "capacity-to-pay" measure between 0–1. Makes the model learn an intuitive financial risk score.
+
+2. Risk Indicator Flags
+
+high_dti = (dti_n > 30).astype(int)
+
+Why: Debt-to-income above 30% is typically considered risky → binary indicator for model.
+
+low_fico = (fico_n < 650).astype(int)
+
+Why: FICO below 650 is a known low credit score threshold → flags higher default probability.
+
+experienced_high_income = (experience_c * (revenue > revenue.median())).astype(int)
+
+Why: Combines experience and above-median income → might indicate more stable borrowers.
+
+3. Polynomial Features
+
+fico_squared = fico_n ** 2
+
+Why: Captures non-linear effects of FICO score on repayment/loan amount. Sometimes changes in risk are non-linear, e.g., very low FICO = huge risk increase.
+
+dti_squared = dti_n ** 2
+
+Why: Similar reasoning: higher DTI may exponentially increase risk.
+
+revenue_log = np.log1p(revenue)
+
+Why: Income is skewed (some extremely high values). Log scaling reduces skew and stabilizes variance for linear models.
+
+4. Encoding Categorical Variables
+
+Label encoding for home_ownership_n, purpose, addr_state
+
+Logistic and linear regression require numeric input.
+
+Label encoding transforms categories to integers while keeping model simple.
